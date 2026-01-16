@@ -1,0 +1,13 @@
+# Arquivos de configuração do CLion (NÃO subir pro GitHub)
+.idea/
+cmake-build-debug/
+*.xml
+
+# Arquivos compilados e executáveis (NÃO subir)
+*.exe
+*.o
+*.obj
+
+# Arquivos do sistema (lixo do Mac/Windows)
+.DS_Store
+Thumbs.db
