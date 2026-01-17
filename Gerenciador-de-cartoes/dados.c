@@ -19,7 +19,7 @@ BancoDados* inicializar_banco() {
     return b;
 }
 
-void adicionar_cliente(BancoDados *b, char *nome) {
+int adicionar_cliente(BancoDados *b, char *nome) {
     if (b->quant_clientes == b->capacidade_clientes) {
         int nova_capacidade = (b->capacidade_clientes == 0) ? 10 : (b->capacidade_clientes * 2);
 
@@ -28,7 +28,7 @@ void adicionar_cliente(BancoDados *b, char *nome) {
 
         if (temp == NULL) {
             printf("Erro Critico: Sem memoria para expandir clientes!\n");
-            exit(ERR_FALTA_MEMORIA);
+            return(ERR_FALTA_MEMORIA);
         }
 
         //se der certo o endereço de clientes se atualiza
@@ -47,4 +47,6 @@ void adicionar_cliente(BancoDados *b, char *nome) {
     b->clientes[i].capacidade_cartoes = 0;
 
     b->quant_clientes++;
+
+    return OK;
 }

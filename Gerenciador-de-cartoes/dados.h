@@ -46,6 +46,8 @@ typedef enum {
 
 BancoDados* inicializar_banco();
 
-void adicionar_cliente(BancoDados *b, char *nome);
+int adicionar_cliente(BancoDados *b, char *nome);
+
+void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro);
 
 #endif

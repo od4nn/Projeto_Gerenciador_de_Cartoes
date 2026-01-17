@@ -8,4 +8,5 @@ add_executable(Projeto_Cartoes_Distribuidora
         Gerenciador-de-cartoes/main.c
         Gerenciador-de-cartoes/dados.h
         Gerenciador-de-cartoes/dados.c
+        Gerenciador-de-cartoes/uteis.c
 )

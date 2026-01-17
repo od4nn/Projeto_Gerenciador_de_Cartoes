@@ -3,11 +3,15 @@
 #include "DADOS.H"
 
 int main() {
+    setbuf(stdout, NULL);
     BancoDados *banco = inicializar_banco();
 
-     adicionar_cliente(banco, "Maria Jose");
-     adicionar_cliente(banco, "Joao Pedro");
-     printf("\nCliente numero 2: %s", banco->clientes[1].nome);
+     tratar_retorno(
+         adicionar_cliente(banco, "Maria Jose"),
+         "Cliente cadastrado(a)", "cadastrar cliente"
+         );
+
+     printf("\nCliente numero 1: %s\n", banco->clientes[0].nome);
 
     return 0;
 }
