@@ -39,7 +39,7 @@ typedef enum {
     OK = 0, //Sucesso geral
 
     //ERROS:
-    ERR_FALTA_MEMORIA = 1 // Falha malloc/realloc
+    ERR_FALTA_MEMORIA = 1, // Falha malloc/realloc
 }CodigosErro;
 
     /*===Prototipos===*/

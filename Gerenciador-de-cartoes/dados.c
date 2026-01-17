@@ -8,7 +8,7 @@ BancoDados* inicializar_banco() {
     BancoDados *b = (BancoDados*) malloc(sizeof(BancoDados));
 
     if (b == NULL) {
-        printf("Erro ao alocar memoria!");
+        printf("Erro Critico: Sem memoria para inicializar o programa!");
         exit(ERR_FALTA_MEMORIA);
     }
 
@@ -20,15 +20,31 @@ BancoDados* inicializar_banco() {
 }
 
 void adicionar_cliente(BancoDados *b, char *nome) {
-    if (b->capacidade_clientes == 0) {
-        b = (BancoDados*) realloc(b, sizeof(BancoDados) * (b->capacidade_clientes += 10));
-    }
     if (b->quant_clientes == b->capacidade_clientes) {
-        b = (BancoDados*) realloc(b, sizeof(BancoDados) * (b->capacidade_clientes *= 2));
+        int nova_capacidade = (b->capacidade_clientes == 0) ? 10 : (b->capacidade_clientes * 2);
+
+        //variavel temp, pq se der NULL a variavel original nao se perde
+        Cliente *temp = (Cliente*) realloc(b->clientes, sizeof(Cliente) * nova_capacidade);
+
+        if (temp == NULL) {
+            printf("Erro Critico: Sem memoria para expandir clientes!\n");
+            exit(ERR_FALTA_MEMORIA);
+        }
+
+        //se der certo o endereço de clientes se atualiza
+        b->clientes = temp;
+        b->capacidade_clientes = nova_capacidade;
     }
 
-    //copiar b->clientes[b->quant_clientes].nome para onde??
-    b->clientes->id = b->quant_clientes + 1; //provavelmente algo assim?
-    b->clientes->cartoes = NULL; //assim talvez? deve ta faltando falar qual o indice do cliente
+    int i = b->quant_clientes;
+
+    b->clientes[i].id = i + 1;
+    strcpy(b->clientes[i].nome, nome);
+
+    //inicializar variaveis com zero por segurança
+    b->clientes[i].cartoes = NULL;
+    b->clientes[i].quant_cartoes = 0;
+    b->clientes[i].capacidade_cartoes = 0;
+
     b->quant_clientes++;
 }
