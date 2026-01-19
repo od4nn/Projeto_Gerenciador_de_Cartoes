@@ -50,3 +50,21 @@ int adicionar_cliente(BancoDados *b, char *nome) {
 
     return OK;
 }
+
+int salvar_clientes(BancoDados *b) {
+    FILE *f = fopen("dados_clientes.txt", "w");
+
+    if (f == NULL) {
+        return ERR_LEITURA;
+    }
+
+    for (int i = 0; i < b->quant_clientes; i++) {
+        Cliente c = b->clientes[i];
+
+        fprintf(f, "%d;%s;%d\n", c.id, c.nome, c.quant_cartoes);
+    }
+    fprintf(f,"Fim da lista.\n");
+
+    fclose(f);
+    return OK;
+}

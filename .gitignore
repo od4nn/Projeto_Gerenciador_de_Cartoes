@@ -1,5 +1,6 @@
 # Arquivos de configuração do CLion (NÃO subir pro GitHub)
 .idea/
+cmake-build-rodar/
 cmake-build-debug/
 *.xml
 

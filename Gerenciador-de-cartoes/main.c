@@ -11,7 +11,17 @@ int main() {
          "Cliente cadastrado(a)", "cadastrar cliente"
          );
 
+    tratar_retorno(
+        adicionar_cliente(banco, "Carlos Pereira"),
+        "Cliente cadastrado(a)", "cadastrar cliente"
+        );
+
      printf("\nCliente numero 1: %s\n", banco->clientes[0].nome);
+
+    tratar_retorno(
+        salvar_clientes(banco), "Cliente salvo",
+        "salvar cliente"
+        );
 
     return 0;
 }
