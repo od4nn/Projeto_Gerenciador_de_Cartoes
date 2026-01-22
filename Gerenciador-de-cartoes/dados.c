@@ -68,3 +68,29 @@ int salvar_clientes(BancoDados *b) {
     fclose(f);
     return OK;
 }
+
+int carregar_clientes(BancoDados *b) {
+    FILE *f = fopen("dados_clientes.txt", "r");
+
+    if (f == NULL) {
+        return OK;
+    }
+
+    char linha[200];
+    int id_lixo, quant_lixo; //temporarias
+    char nome_temp[TAM_NOME];
+
+    while (fgets(linha, 200, f) != NULL) {
+        linha[strcspn(linha,"\n")] = 0;
+
+        int status = sscanf(linha, "%d;%[^;];%d", &id_lixo,
+            nome_temp, &quant_lixo);
+
+        if (status == 3){
+            adicionar_cliente(b, nome_temp);
+        }
+    }
+
+    fclose(f);
+    return OK;
+}
