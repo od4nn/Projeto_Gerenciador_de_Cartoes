@@ -78,7 +78,7 @@ int carregar_clientes (BancoDados *b) {
 
     char LINHA[200];
     int id_lixo;
-    char NOME_TEMP[100];
+    char NOME_TEMP[TAM_NOME];
     int quant_lixo;
 
     while (fgets(LINHA, 200, f) != NULL) {
