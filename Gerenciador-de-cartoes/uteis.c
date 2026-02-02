@@ -21,3 +21,15 @@ void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro) {
         }
     }
 }
+
+void mostrar_menu() {
+    printf("\t\n=== GESTAO DE CARTOES ===");
+    printf("\n1. Adicionar clientes");
+    printf("\n2. Listar clientes existentes");
+    printf("\n0. Sair");
+    printf("Digite o numero da opcao escolhida.");
+}
+
+void limpar_buffer() {
+    while (getchar() != '\n');
+}

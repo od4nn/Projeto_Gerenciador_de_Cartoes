@@ -4,19 +4,21 @@
 
 int main() {
     setbuf(stdout, NULL);
+
     BancoDados *banco = inicializar_banco();
 
-     tratar_retorno(
-         adicionar_cliente(banco, "Maria Jose"),
-         "Cliente cadastrado(a)", "cadastrar cliente"
-         );
-
     tratar_retorno(
-        adicionar_cliente(banco, "Carlos Pereira"),
-        "Cliente cadastrado(a)", "cadastrar cliente"
-        );
+        carregar_clientes(banco),
+        "Dados recuperados do arquivo",
+        "ao carregar backup");
+    int opcao;
+    do {
+        mostrar_menu();
+        scanf("%d", &opcao);
+    }while (opcao != 0);
 
-     printf("\nCliente numero 1: %s\n", banco->clientes[0].nome);
+    mostrar_menu();
+
 
     tratar_retorno(
         salvar_clientes(banco), "Cliente salvo",
