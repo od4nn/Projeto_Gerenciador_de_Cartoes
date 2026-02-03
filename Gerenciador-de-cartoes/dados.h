@@ -53,6 +53,10 @@ void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro);
 
 int salvar_clientes(BancoDados *b);
 
-int carregar_clientes(BancoDados *b);
+void mostrar_menu ();
+
+int carregar_clientes (BancoDados *b);
+
+void limpar_buffer();
 
 #endif
