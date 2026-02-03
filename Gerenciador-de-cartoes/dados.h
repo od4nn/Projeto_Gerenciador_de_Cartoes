@@ -1,4 +1,3 @@
-
 #ifndef DADOS_H
 #define DADOS_H
 
@@ -47,7 +46,8 @@ typedef enum {
 
 BancoDados* inicializar_banco();
 
-int adicionar_cliente(BancoDados *b, char *nome);
+int adicionar_cliente(BancoDados *b, char *nome, char *digitos,
+    char *parceiro, double saldo);
 
 void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro);
 

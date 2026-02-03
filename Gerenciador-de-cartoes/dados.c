@@ -19,7 +19,8 @@ BancoDados* inicializar_banco() {
     return b;
 }
 
-int adicionar_cliente(BancoDados *b, char *nome) {
+int adicionar_cliente(BancoDados *b, char *nome, char *digitos,
+    char *parceiro, double saldo) {
     if (b->quant_clientes == b->capacidade_clientes) {
         int nova_capacidade = (b->capacidade_clientes == 0) ? 10 : (b->capacidade_clientes * 2);
 
@@ -41,8 +42,11 @@ int adicionar_cliente(BancoDados *b, char *nome) {
     b->clientes[i].id = i + 1;
     strcpy(b->clientes[i].nome, nome);
 
-    //inicializar variaveis com zero por segurança
-    b->clientes[i].cartoes = NULL;
+    Cartao *temp = b->clientes[i].cartoes = (Cartao*) malloc(sizeof(Cartao) * 1);
+
+    if (temp == NULL) {
+        return ERR_FALTA_MEMORIA;
+    }
     b->clientes[i].quant_cartoes = 0;
     b->clientes[i].capacidade_cartoes = 0;
 
