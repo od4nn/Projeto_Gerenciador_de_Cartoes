@@ -16,6 +16,9 @@ void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro) {
             printf("Memoria RAM insuficiente.\n");
             break;
         }
+        case ERR_LEITURA: {
+            printf("Falha ao salvar dados de clientes.\n")
+        }
         default: {
             printf("Erro desconhecido.");
         }

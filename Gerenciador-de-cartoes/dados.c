@@ -47,8 +47,13 @@ int adicionar_cliente(BancoDados *b, char *nome, char *digitos,
     if (temp == NULL) {
         return ERR_FALTA_MEMORIA;
     }
-    b->clientes[i].quant_cartoes = 0;
-    b->clientes[i].capacidade_cartoes = 0;
+    b->clientes[i].cartoes[0].id = 1;
+    strcpy(b->clientes[i].cartoes[0].ultimos_digitos, digitos);
+    strcpy(b->clientes[i].cartoes[0].nome_parceiro, parceiro);
+    b->clientes[i].cartoes[0].saldo = saldo;
+
+    b->clientes[i].quant_cartoes = 1;
+    b->clientes[i].capacidade_cartoes = 1;
 
     b->quant_clientes++;
 
@@ -89,7 +94,7 @@ int carregar_clientes (BancoDados *b) {
         int status = sscanf(LINHA, "%d;%[^;];%d", &id_lixo,
             NOME_TEMP, &quant_lixo);
         if (status == 3) {
-            adicionar_cliente(b, NOME_TEMP);
+            adicionar_cliente(b, NOME_TEMP, "0000", "Booby", 0.0);
         }
     }
     fclose(f);
