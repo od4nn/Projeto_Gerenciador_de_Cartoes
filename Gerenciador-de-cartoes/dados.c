@@ -70,7 +70,9 @@ int salvar_clientes(BancoDados *b) {
     for (int i = 0; i < b->quant_clientes; i++) {
         Cliente c = b->clientes[i];
 
-        fprintf(f, "%d;%s;%d\n", c.id, c.nome, c.quant_cartoes);
+        fprintf(f, "%d;%s;%d;%s;%s;%.2lf\n",
+            c.id, c.nome, c.quant_cartoes, c.cartoes[0].ultimos_digitos,
+            c.cartoes[0].nome_parceiro, c.cartoes[0].saldo);
     }
     fprintf(f,"Fim da lista.\n");
 
@@ -85,16 +87,22 @@ int carregar_clientes (BancoDados *b) {
         return OK;
     }
 
-    char LINHA[200];
-    int id_lixo;
+    char LINHA[300];
+    int id_lixo, quant_lixo;
     char NOME_TEMP[TAM_NOME];
-    int quant_lixo;
+    char DIGITOS_TEMP[TAM_DIGITOS];
+    char PARCEIRO_TEMP[TAM_PARCEIRO];
+    double SALDO_TEMP;
 
-    while (fgets(LINHA, 200, f) != NULL) {
-        int status = sscanf(LINHA, "%d;%[^;];%d", &id_lixo,
-            NOME_TEMP, &quant_lixo);
-        if (status == 3) {
-            adicionar_cliente(b, NOME_TEMP, "0000", "Booby", 0.0);
+
+    while (fgets(LINHA, 300, f) != NULL) {
+        LINHA[strcspn(LINHA, "\n")] = 0;
+
+        int status = sscanf(LINHA, "%d;%[^;];%d;%[^;];%[^;];%lf",
+            &id_lixo, NOME_TEMP, &quant_lixo,
+            DIGITOS_TEMP, PARCEIRO_TEMP, &SALDO_TEMP);
+        if (status == 6) {
+            adicionar_cliente(b, NOME_TEMP, DIGITOS_TEMP, PARCEIRO_TEMP, SALDO_TEMP);
         }
     }
     fclose(f);

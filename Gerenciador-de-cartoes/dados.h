@@ -3,7 +3,7 @@
 
 //Definindo tamanhos para o projeto
 #define TAM_NOME 100
-#define TAM_DIGITOS 5
+#define TAM_DIGITOS 10 //so usaremos 6 mas enfim
 #define TAM_PARCEIRO 50
 
     /*===Structs===*/

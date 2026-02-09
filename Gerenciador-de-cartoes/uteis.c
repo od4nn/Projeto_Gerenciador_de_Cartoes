@@ -17,7 +17,7 @@ void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro) {
             break;
         }
         case ERR_LEITURA: {
-            printf("Falha ao salvar dados de clientes.\n")
+            printf("Falha ao salvar dados de clientes.\n");
         }
         default: {
             printf("Erro desconhecido.");
