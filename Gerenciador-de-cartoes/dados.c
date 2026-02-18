@@ -110,42 +110,34 @@ int carregar_clientes (BancoDados *b) {
     return OK;
 }
 
-int adicionar_cartao_extra(BancoDados *b, int id_cliente, char *digitos,
-    char *parceiro, double saldo) {
-    // 1. BUSCA: Precisamos encontrar o cliente pelo ID
-    Cliente *alvo = NULL;
+int adicionar_cartao_extra(BancoDados *b, int id_cliente, char *digitos, char *parceiro, double saldo) {
 
-    for (int i = 0; i < b->quant_clientes; i++) {
-        if (b->clientes[i].id == id_cliente) {
-            alvo = &b->clientes[i]; // Pegamos o endereço dele
-            break;
-        }
-    }
+    // CORREÇÃO AQUI: Primeiro achamos o índice correto
+    int indice = buscar_indice_cliente(b, id_cliente);
 
-    if (alvo == NULL) {
+    if (indice == ERR_CLIENTE_NAO_ENCONTRADO) {
         return ERR_CLIENTE_NAO_ENCONTRADO;
     }
 
+    // Agora sim usamos o índice para apontar
+    Cliente *alvo = &b->clientes[indice];
+
     // 2. VERIFICA CAPACIDADE (Do bolso do cliente)
     if (alvo->quant_cartoes == alvo->capacidade_cartoes) {
-        // Dobra a capacidade
         int nova_capacidade = alvo->capacidade_cartoes * 2;
 
-        // Realloc no vetor de CARTOES desse cliente específico
         Cartao *temp = (Cartao*) realloc(alvo->cartoes, sizeof(Cartao) * nova_capacidade);
 
-        if (temp == NULL) {
-            return ERR_FALTA_MEMORIA;
-        }
+        if (temp == NULL) return ERR_FALTA_MEMORIA;
 
         alvo->cartoes = temp;
         alvo->capacidade_cartoes = nova_capacidade;
     }
 
     // 3. ADICIONA O NOVO CARTÃO
-    int i = alvo->quant_cartoes; // Próxima posição livre
+    int i = alvo->quant_cartoes;
 
-    alvo->cartoes[i].id = i + 1; // ID sequencial do cartão
+    alvo->cartoes[i].id = i + 1;
     strcpy(alvo->cartoes[i].ultimos_digitos, digitos);
     strcpy(alvo->cartoes[i].nome_parceiro, parceiro);
     alvo->cartoes[i].saldo = saldo;
@@ -157,7 +149,15 @@ int adicionar_cartao_extra(BancoDados *b, int id_cliente, char *digitos,
 }
 
 int alterar_dados_cliente(BancoDados *b, int id_cliente) {
-    Cliente *alvo = NULL;
+
+    int indice = buscar_indice_cliente(b, id_cliente);
+
+    if (indice == ERR_CLIENTE_NAO_ENCONTRADO) {
+        return ERR_CLIENTE_NAO_ENCONTRADO;
+    }
+
+    Cliente *alvo = &b->clientes[indice];
+
     // 1. Busca
     for (int i = 0; i < b->quant_clientes; i++) {
         if (b->clientes[i].id == id_cliente) {
@@ -213,4 +213,13 @@ int alterar_dados_cliente(BancoDados *b, int id_cliente) {
     } while (opcao != 0);
 
     return OK;
+}
+
+int buscar_indice_cliente(BancoDados *b, int id) {
+    for (int i = 0; i < b->quant_clientes; i++) {
+        if (b->clientes[i].id == id) {
+            return i; // Achou! Retorna a posição dele
+        }
+    }
+    return ERR_CLIENTE_NAO_ENCONTRADO; // Rodou tudo e não achou
 }

@@ -48,20 +48,72 @@ int main() {
                     "cadastrar cliente");
             }
             break;
-            case 2: {
-                printf("\n=== Clientes cadastrados (%d)===\n",
-                    banco->quant_clientes);
-                for (int i = 0; i < banco->quant_clientes; i++) {
-                    Cliente c = banco->clientes[i]; //atalho para facilitar leitura
 
-                    printf("\nID: %d\t Nome: %s\t", c.id, c.nome);
-                    printf("Cartao: %s\t Parceiro: %s\t Saldo: %lf\n",
-                        c.cartoes[i].ultimos_digitos, c.cartoes[i].nome_parceiro,
-                        c.cartoes[i].saldo);
+            case 2: {
+                printf("\n=== Clientes cadastrados (%d)===\n", banco->quant_clientes);
+
+                for (int i = 0; i < banco->quant_clientes; i++) {
+                    Cliente c = banco->clientes[i];
+
+                    printf("ID: %d | Nome: %s (Total Cartoes: %d)\n", c.id, c.nome, c.quant_cartoes);
+
+                    // Loop J para percorrer OS CARTÕES deste cliente específico
+                    for(int j = 0; j < c.quant_cartoes; j++) {
+                        printf("   -> Cartao %d: %s [%s] - Saldo: R$ %.2f\n",
+                            j+1,
+                            c.cartoes[j].nome_parceiro,
+                            c.cartoes[j].ultimos_digitos,
+                            c.cartoes[j].saldo
+                        );
+                    }
+                    printf("------------------------------------------\n");
                 }
-                printf("------------------------------------------");
             }
-            break;
+                break;
+
+            case 3: {
+                int id_busca;
+
+                printf("\n--- NOVO CARTAO EXTRA ---\n");
+                printf("Informe o ID do Cliente: ");
+                scanf("%d", &id_busca);
+                limpar_buffer();
+
+                // AQUI ESTÁ A MÁGICA:
+                // Verificamos antes de continuar
+                if (buscar_indice_cliente(banco, id_busca) == ERR_CLIENTE_NAO_ENCONTRADO) {
+                    printf("\nErro: Cliente com ID %d nao existe!\n", id_busca);
+                    printf("Operacao cancelada.\n");
+                    break; // Sai do case e volta pro menu
+                }
+
+                // Se chegou aqui, é porque o cliente existe!
+                char DIGITOS[TAM_DIGITOS];
+                char PARCEIRO[TAM_PARCEIRO];
+                double SALDO;
+
+                printf("\nCliente encontrado! Prossiga com os dados do novo cartao.\n");
+
+                printf("Digitos: ");
+                fgets(DIGITOS, TAM_DIGITOS, stdin);
+                DIGITOS[strcspn(DIGITOS, "\n")] = 0;
+
+                printf("Parceiro: ");
+                fgets(PARCEIRO, TAM_PARCEIRO, stdin);
+                PARCEIRO[strcspn(PARCEIRO, "\n")] = 0;
+
+                printf("Saldo: ");
+                scanf("%lf", &SALDO);
+
+                tratar_retorno(
+                    adicionar_cartao_extra(banco, id_busca, DIGITOS,
+                        PARCEIRO, SALDO),
+                    "Cartao vinculado!",
+                    "vincular cartao"
+                );
+                break;
+            }
+
             case 0: {
                 printf("\nEncerrando sistema...");
                 break;

@@ -64,4 +64,6 @@ int adicionar_cartao_extra(BancoDados *b, int id_cliente, char *digitos,
     char *parceiro, double saldo);
 
 int alterar_dados_cliente(BancoDados *b, int id_cliente);
+
+int buscar_indice_cliente(BancoDados *b, int id);
 #endif

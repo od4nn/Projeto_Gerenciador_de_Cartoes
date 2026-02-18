@@ -19,6 +19,9 @@ void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro) {
         case ERR_LEITURA: {
             printf("Falha ao salvar dados de clientes.\n");
         }
+        case ERR_CLIENTE_NAO_ENCONTRADO: {
+            printf("Falha ao encontrar id de cliente.");
+        }
         default: {
             printf("Erro desconhecido.");
         }
@@ -27,10 +30,12 @@ void tratar_retorno (int codigo, char *msg_sucesso, char *msg_erro) {
 
 void mostrar_menu() {
     printf("\t\n\n=== GESTAO DE CARTOES ===");
-    printf("\n1. Adicionar clientes");
-    printf("\n2. Listar clientes existentes");
-    printf("\n0. Sair");
-    printf("\nDigite o numero da opcao escolhida:");
+    printf("\n1. Novo Cliente (+ 1 Cartao)");
+    printf("\n2. Listar Tudo (Clientes e Cartoes)");
+    printf("\n3. Adicionar Cartao Extra (Para cliente ja existente)"); // NOVO
+    printf("\n4. Alterar Dados / Atualizar Saldo"); // NOVO
+    printf("\n0. Sair e Salvar");
+    printf("\nEscolha: ");
 }
 
 void limpar_buffer() {
