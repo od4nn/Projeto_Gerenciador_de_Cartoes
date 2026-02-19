@@ -70,43 +70,77 @@ int salvar_clientes(BancoDados *b) {
     for (int i = 0; i < b->quant_clientes; i++) {
         Cliente c = b->clientes[i];
 
-        fprintf(f, "%d;%s;%d;%s;%s;%.2lf\n",
-            c.id, c.nome, c.quant_cartoes, c.cartoes[0].ultimos_digitos,
-            c.cartoes[0].nome_parceiro, c.cartoes[0].saldo);
+        // 1. Salva o CABEÇALHO do cliente (ID;Nome;Quantidade de Cartões)
+        fprintf(f, "%d;%s;%d\n", c.id, c.nome, c.quant_cartoes);
+
+        // 2. Loop para salvar TODOS os cartões dele logo abaixo
+        for (int j = 0; j < c.quant_cartoes; j++) {
+            fprintf(f, "%s;%s;%.2lf\n",
+                c.cartoes[j].ultimos_digitos,
+                c.cartoes[j].nome_parceiro,
+                c.cartoes[j].saldo
+            );
+        }
     }
-    fprintf(f,"Fim da lista.\n");
+    // O marcador de fim ajuda a saber quando parar
+    fprintf(f, "Fim da lista.\n");
 
     fclose(f);
     return OK;
 }
 
-int carregar_clientes (BancoDados *b) {
+int carregar_clientes(BancoDados *b) {
     FILE *f = fopen("dados_clientes.txt", "r");
+    if (f == NULL) return OK;
 
-    if (f == NULL) {
-        return OK;
-    }
+    char linha[300];
 
-    char LINHA[300];
-    int id_lixo, quant_lixo;
-    char NOME_TEMP[TAM_NOME];
-    char DIGITOS_TEMP[TAM_DIGITOS];
-    char PARCEIRO_TEMP[TAM_PARCEIRO];
-    double SALDO_TEMP;
+    // Variáveis temporárias
+    int id_lixo, qtd_cartoes_total;
+    char nome_tmp[TAM_NOME];
 
+    char digitos_tmp[TAM_DIGITOS];
+    char parceiro_tmp[TAM_PARCEIRO];
+    double saldo_tmp;
 
-    while (fgets(LINHA, 300, f) != NULL) {
-        LINHA[strcspn(LINHA, "\n")] = 0;
+    // Loop principal: Tenta ler o CABEÇALHO do cliente
+    while (fgets(linha, 300, f) != NULL) {
+        // Se achou o fim da lista, para.
+        if (strncmp(linha, "Fim da lista.", 13) == 0) break;
 
-        int status = sscanf(LINHA, "%d;%[^;];%d;%[^;];%[^;];%lf",
-            &id_lixo, NOME_TEMP, &quant_lixo,
-            DIGITOS_TEMP, PARCEIRO_TEMP, &SALDO_TEMP);
-        if (status == 6) {
-            adicionar_cliente(b, NOME_TEMP, DIGITOS_TEMP, PARCEIRO_TEMP, SALDO_TEMP);
+        linha[strcspn(linha, "\n")] = 0;
+
+        // 1. Lê os dados do Cliente
+        int status = sscanf(linha, "%d;%[^;];%d", &id_lixo, nome_tmp, &qtd_cartoes_total);
+
+        if (status == 3) {
+            // Se leu o cliente com sucesso, SABEMOS que a próxima linha é o 1º cartão.
+            // Então forçamos a leitura da próxima linha agora:
+            if (fgets(linha, 300, f) != NULL) {
+                linha[strcspn(linha, "\n")] = 0;
+                sscanf(linha, "%[^;];%[^;];%lf", digitos_tmp, parceiro_tmp, &saldo_tmp);
+
+                // Cria o cliente com o 1º cartão
+                adicionar_cliente(b, nome_tmp, digitos_tmp, parceiro_tmp, saldo_tmp);
+
+                // Pegamos o ID do cliente que acabou de ser criado (é o último da lista)
+                int id_novo_cliente = b->clientes[b->quant_clientes - 1].id;
+
+                // 2. Se o arquivo diz que ele tinha MAIS cartões, vamos ler o resto
+                // Começamos o k=1 porque o cartão 0 já foi lido acima
+                for (int k = 1; k < qtd_cartoes_total; k++) {
+                    fgets(linha, 300, f); // Lê a linha do cartão extra
+                    linha[strcspn(linha, "\n")] = 0;
+
+                    sscanf(linha, "%[^;];%[^;];%lf", digitos_tmp, parceiro_tmp, &saldo_tmp);
+
+                    // Adiciona como extra
+                    adicionar_cartao_extra(b, id_novo_cliente, digitos_tmp, parceiro_tmp, saldo_tmp);
+                }
+            }
         }
     }
     fclose(f);
-
     return OK;
 }
 
