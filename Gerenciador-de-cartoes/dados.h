@@ -40,6 +40,7 @@ typedef enum {
     //ERROS:
     ERR_FALTA_MEMORIA = 1, // Falha malloc/realloc
     ERR_LEITURA = 2, //Falha ao salvar dados dos clientes
+    ERR_CLIENTE_NAO_ENCONTRADO = 3,
 }CodigosErro;
 
     /*===Prototipos===*/
@@ -59,4 +60,10 @@ int carregar_clientes (BancoDados *b);
 
 void limpar_buffer();
 
+int adicionar_cartao_extra(BancoDados *b, int id_cliente, char *digitos,
+    char *parceiro, double saldo);
+
+int alterar_dados_cliente(BancoDados *b, int id_cliente);
+
+int buscar_indice_cliente(BancoDados *b, int id);
 #endif

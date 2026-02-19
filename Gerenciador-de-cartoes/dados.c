@@ -109,3 +109,117 @@ int carregar_clientes (BancoDados *b) {
 
     return OK;
 }
+
+int adicionar_cartao_extra(BancoDados *b, int id_cliente, char *digitos, char *parceiro, double saldo) {
+
+    // CORREÇÃO AQUI: Primeiro achamos o índice correto
+    int indice = buscar_indice_cliente(b, id_cliente);
+
+    if (indice == ERR_CLIENTE_NAO_ENCONTRADO) {
+        return ERR_CLIENTE_NAO_ENCONTRADO;
+    }
+
+    // Agora sim usamos o índice para apontar
+    Cliente *alvo = &b->clientes[indice];
+
+    // 2. VERIFICA CAPACIDADE (Do bolso do cliente)
+    if (alvo->quant_cartoes == alvo->capacidade_cartoes) {
+        int nova_capacidade = alvo->capacidade_cartoes * 2;
+
+        Cartao *temp = (Cartao*) realloc(alvo->cartoes, sizeof(Cartao) * nova_capacidade);
+
+        if (temp == NULL) return ERR_FALTA_MEMORIA;
+
+        alvo->cartoes = temp;
+        alvo->capacidade_cartoes = nova_capacidade;
+    }
+
+    // 3. ADICIONA O NOVO CARTÃO
+    int i = alvo->quant_cartoes;
+
+    alvo->cartoes[i].id = i + 1;
+    strcpy(alvo->cartoes[i].ultimos_digitos, digitos);
+    strcpy(alvo->cartoes[i].nome_parceiro, parceiro);
+    alvo->cartoes[i].saldo = saldo;
+
+    // 4. ATUALIZA CONTADORES
+    alvo->quant_cartoes++;
+
+    return OK;
+}
+
+int alterar_dados_cliente(BancoDados *b, int id_cliente) {
+
+    int indice = buscar_indice_cliente(b, id_cliente);
+
+    if (indice == ERR_CLIENTE_NAO_ENCONTRADO) {
+        return ERR_CLIENTE_NAO_ENCONTRADO;
+    }
+
+    Cliente *alvo = &b->clientes[indice];
+
+    // 1. Busca
+    for (int i = 0; i < b->quant_clientes; i++) {
+        if (b->clientes[i].id == id_cliente) {
+            alvo = &b->clientes[i];
+            break;
+        }
+    }
+
+    if (alvo == NULL) {
+        printf("Erro: Cliente nao encontrado.\n");
+        return -1;
+    }
+
+    // 2. Menu de Edição
+    int opcao;
+    do {
+        printf("\n--- ALTERANDO: %s ---\n", alvo->nome);
+        printf("1. Alterar Nome\n");
+        printf("2. Alterar Digitos (Cartao Principal)\n");
+        printf("3. Alterar Parceiro (Cartao Principal)\n");
+        printf("4. Alterar Saldo (Cartao Principal)\n");
+        printf("0. Voltar\n");
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+        limpar_buffer();
+
+        switch(opcao) {
+            case 1:
+                printf("\nNovo Nome: ");
+                fgets(alvo->nome, TAM_NOME, stdin);
+                alvo->nome[strcspn(alvo->nome, "\n")] = 0;
+                break;
+            case 2:
+                printf("\nNovos Digitos: ");
+                fgets(alvo->cartoes[0].ultimos_digitos, TAM_DIGITOS, stdin);
+                alvo->cartoes[0].ultimos_digitos[strcspn(alvo->cartoes[0].ultimos_digitos, "\n")] = 0;
+                break;
+            case 3:
+                printf("\nNovo Parceiro: ");
+                fgets(alvo->cartoes[0].nome_parceiro, TAM_PARCEIRO, stdin);
+                alvo->cartoes[0].nome_parceiro[strcspn(alvo->cartoes[0].nome_parceiro, "\n")] = 0;
+                break;
+            case 4:
+                printf("\nNovo Saldo: ");
+                scanf("%lf", &alvo->cartoes[0].saldo);
+                limpar_buffer();
+                break;
+            case 0:
+                break;
+            default:
+                printf("\nOpcao invalida. Escolha uma opcao entre 0 e 4.\n");
+        }
+    } while (opcao != 0);
+
+    return OK;
+}
+
+int buscar_indice_cliente(BancoDados *b, int id) {
+    for (int i = 0; i < b->quant_clientes; i++) {
+        if (b->clientes[i].id == id) {
+            return i; // Achou! Retorna a posição dele
+        }
+    }
+    return ERR_CLIENTE_NAO_ENCONTRADO; // Rodou tudo e não achou
+}
