@@ -50,7 +50,7 @@ int main() {
             break;
 
             case 2: {
-                printf("\n=== Clientes cadastrados (%d)===\n", banco->quant_clientes);
+                printf("\n=== Clientes cadastrados (%d)===\n\n", banco->quant_clientes);
 
                 for (int i = 0; i < banco->quant_clientes; i++) {
                     Cliente c = banco->clientes[i];
@@ -114,6 +114,20 @@ int main() {
                 break;
             }
 
+            case 4: {
+                int id_cliente;
+                printf("Informe o ID do Cliente: ");
+                scanf("%d", &id_cliente);
+                limpar_buffer();
+
+                if (buscar_indice_cliente(banco, id_cliente) == ERR_CLIENTE_NAO_ENCONTRADO) {
+                    printf("\nErro: Cliente com ID %d nao existe!\n", id_cliente);
+                    break;
+                }
+
+                tratar_retorno(alterar_dados_cliente(banco, id_cliente), "Dados alterados!",
+                    "Ao alterar dados.");
+            }
             case 0: {
                 printf("\nEncerrando sistema...");
                 break;
