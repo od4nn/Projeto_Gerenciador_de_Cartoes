@@ -1,47 +1,40 @@
-# 💳 Sistema de Gestão de Cartões (CLI)
+# Sistema de Gestão de Cartões (CLI)
 
-Um sistema de gerenciamento de clientes e cartões desenvolvido inteiramente em **C**. Este projeto nasceu da necessidade de resolver um problema real: a desorganização no controle manual de cartões, parceiros e limites de crédito em pequenos negócios/uso pessoal.
+Um sistema de gerenciamento de clientes e cartões construído inteiramente em C. Desenvolvi este projeto para resolver um problema real: a bagunça no controle manual de cartões, parceiros e limites de crédito no dia a dia.
 
-Atualmente, o projeto é um **MVP (Produto Mínimo Viável)** executado via terminal (CLI - Command Line Interface), construído como aplicação prática dos conceitos de Algoritmos e Programação Estruturada vistos na faculdade.
+Atualmente, o projeto é um MVP rodando direto no terminal (CLI), criado para colocar em prática os conceitos de Algoritmos e Programação Estruturada vistos na faculdade.
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-O sistema realiza um CRUD completo e lida com um **relacionamento 1:N** (Um Cliente para Muitos Cartões):
+O sistema realiza um CRUD completo lidando com um relacionamento 1:N (um cliente pode ter vários cartões):
 
-- **Cadastro de Clientes:** Criação de novos perfis já vinculados a um cartão inicial.
-- **Adição de Cartões Extras:** Capacidade de vincular múltiplos cartões (de diferentes parceiros/bandeiras) a um único cliente existente.
-- **Listagem e Relatórios:** Exibição hierárquica de todos os clientes e seus respectivos cartões e saldos.
-- **Atualização de Dados:** Menu dedicado para alterar informações e atualizar saldos.
-- **Persistência de Dados:** Salvamento automático das informações em disco (`.txt`), garantindo que nenhum dado seja perdido ao fechar o programa.
+- Cadastro de Clientes: Cria o perfil já vinculando o primeiro cartão.
+- Cartões Extras: Permite adicionar múltiplos cartões (de diferentes parceiros/bandeiras) a um cliente que já existe.
+- Listagem e Relatórios: Exibe de forma hierárquica todos os clientes, seus cartões e saldos.
+- Atualização de Dados: Menu para editar informações e atualizar o saldo.
+- Persistência de Dados: Salva as informações automaticamente em disco (.txt), garantindo que os dados não sejam perdidos ao fechar o programa.
 
-## 🛠️ Tecnologias e Conceitos Aplicados
+## Tecnologias e Conceitos Aplicados
 
-Este não é apenas um script simples. O sistema foi desenhado aplicando conceitos pesados de Engenharia de Software e gerenciamento de memória:
+O foco do projeto foi lidar com o gerenciamento manual da memória e estruturação de dados em C:
 
-* **Linguagem C:** Base sólida do projeto.
-* **Alocação Dinâmica de Memória:** Uso de `malloc` e `realloc` para criar vetores dinâmicos de clientes e cartões, expandindo a memória sob demanda sem desperdício.
-* **Ponteiros e Estruturas Aninhadas (Structs):** Manipulação de ponteiros de structs dentro de outras structs para criar o relacionamento Cliente -> Cartões.
-* **Persistência / Serialização Customizada:** Lógica própria para transformar dados complexos da memória RAM (Pai e Filhos) em texto plano (HD) e reconstruir essa estrutura ao iniciar o programa.
-* **Tratamento de Input e Buffer:** Prevenção de bugs de leitura de teclado (`stdin`) usando `fgets` e limpeza de buffer.
+- Linguagem C: Base do projeto.
+- Alocação Dinâmica de Memória: Uso de malloc e realloc para vetores dinâmicos, expandindo a capacidade do sistema sob demanda sem desperdiçar memória.
+- Ponteiros e Structs Aninhadas: Uso de ponteiros de structs dentro de outras structs para criar a relação Cliente -> Cartões.
+- Persistência / Serialização: Lógica própria para transformar os dados da memória RAM em texto plano (arquivo) e reconstruir essa estrutura ao reiniciar.
+- Tratamento de Input e Buffer: Prevenção de bugs na leitura de teclado (stdin) usando fgets e rotinas de limpeza de buffer.
 
-## 🚀 Como Executar
-
+## Como Executar
+```
 1. Clone este repositório:
-   ```bash
-   git clone [https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git](https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git)
+git clone https://github.com/od4nn/Projeto_Gerenciador_de_Cartoes.git
 
-2. Compile o código usando o GCC:
-   ```bash
-   gcc main.c dados.c -o gestao_cartoes
+2. Entre na pasta onde estão os arquivos de código:
+cd Projeto_Gerenciador_de_Cartoes/Gerenciador-de-cartoes
 
-3. Execute o programa:
-   ```bash
-   ./gestao_cartoes
+3. Compile o código usando o GCC (juntando todos os arquivos .c):
+gcc main.c dados.c uteis.c -o gestao_cartoes
 
-  ## 🔮 Próximos Passos (Roadmap)
-  
-  [ ] Implementar a exclusão de cartões e clientes (Delete).
+4. Execute o programa:
+./gestao_cartoes
 
-  [ ] Criar função para liberação total de memória (free) ao encerrar o sistema.
-
-  [ ] Evolução: Escalar a lógica de backend construída aqui para uma aplicação Web completa (Fullstack) no futuro.
